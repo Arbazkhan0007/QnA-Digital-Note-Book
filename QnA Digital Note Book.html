@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Q&A Digital Note Book</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>QnA Digital Note Book</h1>
+    <div id="questionList">
+      <!-- Questions will appear here -->
+    </div>
+    <div id="addQuestionForm">
+      <h3>Add a Question</h3>
+      <input type="text" id="questionInput" placeholder="Enter your question">
+      <button onclick="addQuestion()">Submit</button>
+       </div>
+  </div>
+ <script src="script.js"></script>
+</body>
+</html>
+
+<!--css code-->
+<style>
+body {
+  font-family:Fantasy;
+  margin: 0;
+  padding: 0;
+  background-color:#7FFFD4;
+}
+.container {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color:#F0F8FF;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0,128,0);
+}
+
+h1 {
+  text-align: center;
+}
+
+#addQuestionForm {
+  margin-top: 20px;
+}
+
+input[type="text"] {
+  width: 70%;
+  padding: 8px;
+  margin-right: 10px;
+}
+
+button {
+  padding: 8px 15px;
+  background-color:#7fffd4;
+  color: #000000;
+  border: none;
+  cursor: pointer;
+} 
+</style>
+
+
+<!--JavaScript code-->
+<script> 
+let qaPairs = [
+  { 
+    question: "What is your name?", 
+    answer: "I am a Q&A Digital Note Book." 
+  },
+  { 
+    question: "How does this app work?", 
+    answer: "This app allows users to add questions and submit answers." 
+  },
+  // Add more question-answer pairs here...
+];
+
+// Function to add a question
+function addQuestion() {
+  const questionInput = document.getElementById("questionInput");
+  const questionText = questionInput.value.trim();
+
+  if (questionText !== "") {
+    qaPairs.push({ question: questionText, answer: "" });
+    displayQuestions();
+    questionInput.value = ""; // Clear the input field after adding the question
+  }
+}
+
+// Function to display questions and answers
+function displayQuestions() {
+  const questionList = document.getElementById("questionList");
+  questionList.innerHTML = ""; // Clear previous content
+qaPairs.forEach((qaPair, index) => {
+    const questionItem = document.createElement("div");
+    questionItem.classList.add("question");
+    questionItem.innerHTML = `
+      <p><strong>Question ${index + 1}:</strong> ${qaPair.question}</p>
+      ${qaPair.answer ? `<p><strong>Answer:</strong> ${qaPair.answer}</p>` : `
+      <textarea id="answerInput-${index}" placeholder="Enter your answer"></textarea>
+      <button onclick="submitAnswer(${index})">Submit Answer</button>`}
+      <button onclick="deleteQuestion(${index})">Delete</button>
+    `;
+    questionList.appendChild(questionItem);
+  });
+}
+
+// Function to submit an answer
+function submitAnswer(index) {
+  const answerInput = document.getElementById(`answerInput-${index}`);
+  const answerText = answerInput.value.trim();
+ if (answerText !== "") {
+    qaPairs[index].answer = answerText;
+    displayQuestions();
+    answerInput.value = ""; // Clear the answer input field after submitting
+  }
+}
+// Function to delete a question
+function deleteQuestion(index) {
+  qaPairs.splice(index, 1);
+  displayQuestions();
+}
+// Initial display of questions
+displayQuestions();
+</script>
